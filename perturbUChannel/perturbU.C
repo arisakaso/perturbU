@@ -56,6 +56,7 @@ int main(int argc, char *argv[])
     // x streamwise
     // Ubar should be set in transportProperties
 
+    
     IOdictionary perturbDict
     (
         IOobject
@@ -73,6 +74,7 @@ int main(int argc, char *argv[])
     const bool perturb(readBool(perturbDict.lookup("perturb")));
     const direction streamDir(readLabel(perturbDict.lookup("streamwise")));
     const direction spanDir(readLabel(perturbDict.lookup("spanwise")));
+    const int seed = Foam::readInt(perturbDict.lookup("seed"));
 
     Info<< "Channel half height       = " << h << nl
         << "Re(tau)                   = " << Retau << nl
@@ -80,6 +82,7 @@ int main(int argc, char *argv[])
         << "Perturb flow              = " << Switch(perturb) << nl
         << "Streamwise flow component = " << streamDir << nl
         << "Spanwise flow component   = " << spanDir << nl
+        << "Random seed               = " << seed << nl
         << endl;
 
 
@@ -163,7 +166,6 @@ int main(int argc, char *argv[])
     const scalar epsilon = Ubar.value()[streamDir]/200.0;
 
     // Random number generator
-    const int seed = atoi(argv[1]);
     Random perturbation(seed);
 
     const vectorField& centres = mesh.C();
